@@ -1,15 +1,16 @@
 /* General Styles */
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
     text-align: center;
+    background: linear-gradient(135deg, #f3f3f3, #d9e4f5);
+    color: #333;
 }
 
-/* Light & Dark Mode */
+
 .dark-mode {
-    background: #222;
+    background: #121212;
     color: white;
 }
 
@@ -17,57 +18,99 @@ body {
 .main-header, .dashboard-header {
     display: flex;
     justify-content: space-between;
-    padding: 15px;
-    color: white;
+    padding: 15px 20px;
     align-items: center;
+    /* border-radius: 12px; */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* Main Header */
 .main-header {
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    background: linear-gradient(135deg, hsl(347, 95%, 64%), #fac2b8);
+    color: white;
+    font-weight: bold;
 }
 
-/* Dashboard Header */
+
 .dashboard-header {
-    background: linear-gradient(135deg, #333, #444);
+    background: linear-gradient(135deg, #2c3e50, #4ca1af);
+    color: white;
+    font-weight: bold;
 }
 
-/* Centered Content */
+
 .center {
+    margin: 8% auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 80vh;
+    height: auto;
+    border: 3px solid #3498db;
+    border-radius: 20px;
+    width: 80%;
+    max-width: 400px;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
 }
 
-/* Inputs & Buttons */
+
 input, select, button {
-    padding: 12px;
-    margin: 10px;
-    border-radius: 5px;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 6px;
     border: none;
-    font-size: 16px;
-}
-
-button {
-    background: #ff5722;
-    color: white;
-    cursor: pointer;
+    font-size: 14px;
+    width: auto;
+    max-width: 250px;
     transition: all 0.3s ease-in-out;
 }
 
-button:hover {
-    background: #e64a19;
-    transform: scale(1.1);
+
+#password, #username {
+    border: 2px solid #7f8c8d;
+    padding: 10px;
+    width: 100%;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    color: #333;
 }
 
-/* Hidden by Default */
+
+button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    font-size: 14px;
+    background: linear-gradient(135deg, #ff7eb3, #f86a9a);
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #ff3d77, #ffb5ce);
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+
 .hidden {
     display: none;
 }
 
-/* Chart Containers */
+
 .chart-container1 {
     display: flex;
     justify-content: center;
@@ -79,28 +122,55 @@ button:hover {
 .chart-container {
     width: 90%;
     max-width: 700px;
+    height: 400px;
     padding: 20px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease-in-out;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     margin: 4% 0px;
 }
 
 .chart-container:hover {
     transform: scale(1.05);
+    box-shadow: 0px 6px 25px rgba(0, 0, 0, 0.4);
 }
 
-/* Responsive Design */
+
+.select-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+
 @media (max-width: 768px) {
     .dashboard-header {
         flex-direction: column;
         align-items: center;
+        text-align: center;
+    }
+    .center {
+        width: 90%;
+        padding: 30px;
     }
 }
 
 @media (max-width: 480px) {
     input, select, button {
         width: 100%;
+    }
+    .chart-container {
+        height: auto;
+        padding: 15px;
     }
 }
