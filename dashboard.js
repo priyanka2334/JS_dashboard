@@ -12,54 +12,96 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let barChart, lineChart;
 
-    // Sign-in button event
-    signinBtn.addEventListener("click", function () {
-        loginPage.classList.remove("hidden");
-        gsap.from(loginPage, { opacity: 0, y: -50, duration: 1 });
-    });
-
-    // Login button event
-    loginBtn.addEventListener("click", function () {
-        let username = document.getElementById("username").value.trim();
-        let password = document.getElementById("password").value.trim();
-
-        if (username !== "" && password !== "") {
-            gsap.to(loginPage, { opacity: 1, duration: 1, onComplete: () => {
-                loginPage.classList.add("hidden");
-                dashboard.classList.remove("hidden");
-                gsap.from(dashboard, { opacity: 1, y: -50, duration: 1 });
-                signinBtn.style.display = "none";
-                loadCharts();
-            }});
-        } else {
-            alert("Please enter a valid username and password.");
+    function setCookie(name, value, days) {
+        let expires = "";
+        if (days) {
+            let date = new Date();
+            date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+            expires = "; expires=" + date.toUTCString();
         }
-    });
+        document.cookie = name + "=" + value + expires + "; path=/";
+    }
 
-    // Logout button event
+    function getCookie(name) {
+        let nameEQ = name + "=";
+        let cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            let c = cookies[i].trim();
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length);
+        }
+        return null;
+    }
+
+    if (localStorage.getItem("isLoggedIn") === "true") {
+        loginPage.classList.add("hidden");
+        dashboard.classList.remove("hidden");
+        signinBtn.style.display = "none";
+        loadCharts();
+
+        let savedTheme = getCookie("theme");
+        let savedAge = getCookie("age");
+        let savedGender = getCookie("gender");
+
+        if (savedTheme === "dark") {
+            document.body.classList.add("dark-mode");
+            themeToggle.textContent = "Light Mode";
+        }
+
+        if (savedAge) ageSelect.value = savedAge;
+        if (savedGender) genderSelect.value = savedGender;
+
+        updateCharts();
+    } else {
+        loginPage.classList.remove("hidden");
+        dashboard.classList.add("hidden");
+    }
+
+
+loginBtn.addEventListener("click", function () {
+    let username = document.getElementById("username").value.trim();
+    let password = document.getElementById("password").value.trim();
+
+    if (username !== "" && password !== "") {
+        loginPage.classList.add("hidden");
+        dashboard.classList.remove("hidden");
+        signinBtn.style.display = "none";
+        localStorage.setItem("isLoggedIn", "true");
+        
+        loadCharts();
+    } else {
+        alert("Please enter a valid username and password.");
+    }
+});
+
+
     logoutBtn.addEventListener("click", function () {
-        gsap.to(dashboard, { duration: 1, onComplete: () => {
-            dashboard.classList.add("hidden");
-            loginPage.classList.remove("hidden");
-            gsap.from(loginPage, { opacity: 0, y: -50, duration: 1 });
-            signinBtn.style.display = "block";
-            document.getElementById("username").value = "";
-            document.getElementById("password").value = "";
-        }});
+        dashboard.classList.add("hidden");
+        loginPage.classList.remove("hidden");
+        signinBtn.style.display = "block";
+        document.getElementById("username").value = "";
+        document.getElementById("password").value = "";
+        localStorage.removeItem("isLoggedIn");
     });
 
-    // Theme toggle event
     themeToggle.addEventListener("click", function () {
         document.body.classList.toggle("dark-mode");
-        themeToggle.textContent = document.body.classList.contains("dark-mode") ? "Light Mode" : "Dark Mode";
+        let theme = document.body.classList.contains("dark-mode") ? "dark" : "light";
+        themeToggle.textContent = theme === "dark" ? "Light Mode" : "Dark Mode";
+        setCookie("theme", theme, 30);
     });
 
-    // Event listeners for updating charts dynamically
-    ageSelect.addEventListener("change", updateCharts);
-    genderSelect.addEventListener("change", updateCharts);
+    ageSelect.addEventListener("change", function () {
+        setCookie("age", ageSelect.value, 30);
+        updateCharts();
+    });
+
+    genderSelect.addEventListener("change", function () {
+        setCookie("gender", genderSelect.value, 30);
+        updateCharts();
+    });
+
     dateInput.addEventListener("change", updateCharts);
 
-    // Function to load initial charts
     function loadCharts() {
         const barCtx = document.getElementById("barChart").getContext("2d");
         const lineCtx = document.getElementById("lineChart").getContext("2d");
@@ -76,10 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     backgroundColor: ["red", "blue", "green", "purple", "orange", "cyan"]
                 }]
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
-            }
+            options: { responsive: true, maintainAspectRatio: false }
         });
 
         lineChart = new Chart(lineCtx, {
@@ -93,22 +132,17 @@ document.addEventListener("DOMContentLoaded", function () {
                     fill: false
                 }]
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
-            }
+            options: { responsive: true, maintainAspectRatio: false }
         });
 
-        updateCharts();  // Ensure initial charts get correct data
+        updateCharts();
     }
 
-    // Function to update charts based on Age, Gender, and Date
     function updateCharts() {
         const selectedDate = dateInput.value;
         const selectedAge = ageSelect.value;
         const selectedGender = genderSelect.value;
 
-        // Sample dataset for different dates
         let dateData = {
             "2024-02-01": [10, 20, 30, 40, 50, 60],
             "2024-02-02": [25, 35, 45, 55, 65, 75],
@@ -118,16 +152,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let baseData = dateData[selectedDate] || [5, 10, 15, 20, 25, 30];
 
-        // Age-based multipliers
-        let ageFactors = {
-            "18": 1.1, "25": 1.2, "30": 1.3, "40": 1.4, 
-            "50": 1.5, "60": 1.6, "70": 1.7, "80": 1.8
-        };
-
-        // Gender-based multipliers
-        let genderFactors = {
-            "Male": 1.0, "Female": 1.1, "Other": 1.2
-        };
+        let ageFactors = { "18": 1.1, "25": 1.2, "30": 1.3, "40": 1.4, "50": 1.5, "60": 1.6, "70": 1.7, "80": 1.8 };
+        let genderFactors = { "Male": 1.0, "Female": 1.1, "Other": 1.2 };
 
         let ageMultiplier = ageFactors[selectedAge] || 1;
         let genderMultiplier = genderFactors[selectedGender] || 1;
@@ -141,13 +167,6 @@ document.addEventListener("DOMContentLoaded", function () {
         lineChart.update();
     }
 });
-
-
-
-
-
-
-
 
 
 

@@ -10,13 +10,11 @@
     <script src="dashboard.js" defer></script>
 </head>
 <body>
-    <!-- Main Header -->
     <header class="main-header">
         <h1>My Website</h1>
         <button id="signin-btn">Log In</button>
     </header>
 
-    <!-- Login Page -->
     <div id="login-page" class="center">
         <h2>Log In</h2>
         <label for="username">Username:</label>
@@ -27,13 +25,12 @@
     </div>
 
     <div id="dashboard" class="hidden">
-        <!-- Second Header -->
         <header class="dashboard-header">
             <div class="select-container">
-                <label for="date">Select Date:</label>
+                <label for="date" class="color">Select Date:</label>
                 <input type="date" id="date">
                 <p id="selected-date"></p>
-                <label for="age">Age:</label>
+                <label for="age" class="color">Age:</label>
                 <select id="age">
                     <option value="18">18</option>
                     <option value="25">25</option>
@@ -46,7 +43,7 @@
                 </select>
                 <p id="age-display"></p>
 
-                <label for="gender">Gender:</label>
+                <label for="gender" class="color">Gender:</label>
                 <select id="gender">
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -54,9 +51,7 @@
                 </select>
                 <p id="gender-display"></p>
 
-                <!-- <label for="date">Select Date:</label>
-                <input type="date" id="date">
-                <p id="selected-date"></p> -->
+                
             </div>
 
             <div>
@@ -65,15 +60,14 @@
             </div>
         </header>
 
-        <!-- Charts Section -->
-        <div class="chart-container1">
+         <div class="chart-container1">
             <div class="chart-container">
                 <canvas id="barChart"></canvas>
             </div>
             <div class="chart-container">
                 <canvas id="lineChart"></canvas>
             </div>
-        </div>
+        </div> 
     </div>
 </body>
 </html>
